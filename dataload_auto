@@ -1,0 +1,38 @@
+#Download initial dataset
+wget 46.101.230.157/lkds_june_2020
+----------------------------------------------------------------------------------------------
+#Categorize based on even_type
+start=1
+end=XXXX
+
+while [ $start != $end ]
+do
+
+filename=day_$start
+cat /home/sush/logs/$filename | grep 'registration' > /home/sush/registrations/$filename
+cat /home/sush/logs/$filename | grep 'free_tree' > /home/sush/free_trees/$filename
+cat /home/sush/logs/$filename | grep 'super_tree' > /home/sush/super_trees/$filename
+start=$((start + 1))
+
+done
+----------------------------------------------------------------------------------------------
+#Automation code 
+#!/usr/bin/env bash
+index_last=$(ls -v /home/sush/logs | grep day | tail -1 | cut -d'_' -f2)
+index_yesterday=$((index_last + 1))
+filename=day_$index_yesterday
+wget 46.101.230.157/lkds_june_2020/$filename -P /home/sush/logs
+cat /home/sush/logs/$filename | grep 'registration' > /home/sush/registrations/$filename
+cat /home/sush/logs/$filename | grep 'free_tree' > /home/sush/free_trees/$filename
+cat /home/sush/logs/$filename | grep 'super_tree' > /home/sush/super_trees/$filename
+#SQL table load automation
+psql -U sush -d postgres -c "COPY registrations FROM '/home/sush/registrations/$filename' DELIMITER ' ';"
+psql -U sush -d postgres -c "COPY free_tree FROM '/home/sush/free_trees/$filename' DELIMITER ' ';"
+psql -U sush -d postgres -c "COPY super_tree FROM '/home/sush/super_trees/$filename' DELIMITER ' ';"
+#Daily Active Users and Daily Revenve automation
+psql -U sush -d postgres -f /home/sush/daily_active_users.sql > /home/sush/daily_active_users
+psql -U sush -d postgres -f /home/sush/daily_revenue.sql > /home/sush/daily_revenue
+-----------------------------------------------------------------------------------------------
+#crontab code
+15 0 * * * /home/sush/automation.sh
+
