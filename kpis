@@ -1,10 +1,36 @@
 
 #Total revenue
-SELECT source, COUNT(*) - COUNT(DISTINCT(super_tree.user_id)) as revenue
-FROM super_tree
+SELECT source, COUNT(*) - COUNT(DISTINCT(super_trees.user_id)) as revenue
+FROM super_trees
 JOIN registrations
-ON super_tree.user_id = registrations.user_id
+ON super_trees.user_id = registrations.user_id
 GROUP BY source
 --------------------------------------------------------------------------
 #Daily Active Users
-CREATE TABLE 
+CREATE TABLE daily_active_users_kpi (
+my_date DATE,
+kpi INTEGER);
+
+INSERT INTO daily_active_users_kpi
+SELECT (SELECT current_date-1 as yesterday) AS my_date,
+COUNT(DISTINCT(user_id))AS kpi
+FROM(
+SELECT * FROM free_trees 
+UNION ALL
+SELECT * FROM super_trees) as free_and_super
+WHERE my_date=(SELECT current_date-1 as yesterday);
+--------------------------------------------------------------------------
+#Daily Revenue
+CREATE TABLE daily_revenue_kpi (
+my_date DATE,
+kpi INTEGER);
+
+INSERT INTO daily_revenue_kpi
+SELECT (SELECT current date-1 as yesterday) AS my_date,
+(SELECT COUNT(*) -COUNT(DISTINCT(user_id))
+FROM super_tree
+WHERE my_date < (SELECT current_date as today ))
+-
+(SELECT COUNT(*)-COUNT(DISTINCT(user_id))
+FROM super_tree
+WHERE my_date < (SELECT current_date-1 as yesterday))AS kpi;
