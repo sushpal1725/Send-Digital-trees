@@ -1,0 +1,63 @@
+SELECT reg.my_date,
+       reg.source,
+       reg.phone_type,
+       reg.reg,
+       free_users.free_users,
+       super_users.super_users,
+       paying_users.paying_users
+FROM
+    (SELECT my_date,
+            source,
+            phone_type,
+            COUNT(*) AS reg
+     FROM registrations
+     GROUP BY my_date,
+              source,
+              phone_type
+     ORDER BY my_date) AS reg
+LEFT JOIN
+   (SELECT registrations.my_date,
+           registrations.source,
+           registrations.phone_type,
+           COUNT(DISTINCT (free_tree.user_id)) AS free_users
+    FROM free_tree
+      JOIN registrations ON registrations.user_id = free_tree.user_id
+    GROUP BY registrations.my_date,
+             registrations.source,
+             registrations.phone_type
+    ORDER BY registrations.my_date) AS free_users
+ON reg.my_date = free_users.my_date
+   AND reg.source = free_users.source
+   AND reg.phone_type = free_users.phone_type
+LEFT JOIN
+   (SELECT registrations.my_date,
+           registrations.source,
+           registrations.phone_type,
+           COUNT(DISTINCT (super_tree.user_id)) AS super_users
+    FROM super_tree
+      JOIN registrations ON registrations.user_id = super_tree.user_id
+    GROUP BY registrations.my_date,
+             registrations.source,
+             registrations.phone_type
+    ORDER BY registrations.my_date) AS super_users
+ON reg.my_date = super_users.my_date
+   AND reg.source = super_users.source
+   AND reg.phone_type = super_users.phone_type
+LEFT JOIN
+   (SELECT registrations.my_date,
+           registrations.source,
+           registrations.phone_type,
+           COUNT(paying_users.user_id) AS paying_users
+    FROM (SELECT user_id,
+                 COUNT(*)
+          FROM super_tree
+          GROUP BY user_id
+          HAVING COUNT(*) > 1) AS paying_users
+      JOIN registrations ON registrations.user_id = paying_users.user_id
+    GROUP BY registrations.my_date,
+             registrations.source,
+             registrations.phone_type
+    ORDER BY registrations.my_date) AS paying_users
+ON reg.my_date = paying_users.my_date
+   AND reg.source = paying_users.source
+   AND reg.phone_type = paying_users.phone_type;
