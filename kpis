@@ -1,0 +1,10 @@
+
+#Total revenue
+SELECT source, COUNT(*) - COUNT(DISTINCT(super_tree.user_id)) as revenue
+FROM super_tree
+JOIN registrations
+ON super_tree.user_id = registrations.user_id
+GROUP BY source
+--------------------------------------------------------------------------
+#Daily Active Users
+CREATE TABLE 
