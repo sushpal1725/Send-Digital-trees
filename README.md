@@ -1,5 +1,5 @@
 # Send-Digital-trees
-It is a hypothetical startup, where a user registers, sends free digital trees to people in their contacts and also paid supertrees,$1 each(the first supertree is free). A super can come to know and register for Send A Tree through source: google, invite_a_friend, paid promo, and article. A daily of the file is created for each day (filename: day_xx), containing event_type: registration, free_tree_send or super_tree_send, date, location, phone_type, birth_year, and source.  
+It is a hypothetical startup, where a user registers, sends free digital trees to people in their contacts and also paid supertrees,$1 each(the first supertree is free). A user can come to know the app and register for Send A Tree through these sources: google, invite_a_friend, paid promo, and article. A daily log file is created for each day (filename: day_xx), containing event_type: registration, free_tree_send or super_tree_send, date, location, phone_type, birth_year, and source.  
   
 In this project: 
 
