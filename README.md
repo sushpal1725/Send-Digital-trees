@@ -3,9 +3,9 @@ It is a hypothetical startup, where a user registers, sends free digital trees t
   
 In this project: 
 
-I have set up Jupyter Notebook, PgAdmin, Rstudio, and Python3 on remote LINUX server, using DigitalOcean. 
+I have set up Jupyter Notebook, PgAdmin, and Python3 on remote LINUX server, using DigitalOcean. 
 
-Set up automation for data load, automated categorization based on event type and storing daily logs in respective folders, through CRONTAB Created SQL tables, for the categorized daily logs for REGISTRATIONS, FREE TREE SEND, and SUPER TREE SEND and automated SQL load.
+I have set up automation for data load, automated categorization based on event type and storing daily logs in respective folders, through CRONTAB Created SQL tables, for the categorized daily logs for REGISTRATIONS, FREE TREE SEND, and SUPER TREE SEND and automated SQL load.
 
 Performed broad market segmentation tasks through SQL and Python. Segments: Registrations, Free Trees, Super Trees 
 
@@ -23,4 +23,4 @@ Performed revenue calculation task in SQL and Python: Calculating the total reve
 
 Performed Funnel Analysis and Cohort Analysis( first and last 30 days) in SQL and Python. Performed Prediction Analysis to predict, Send-a-Tree possibly reaching the 25,000 free-tree sends per day, 10,000 super tree sends per day, 35,000 registrants per day.
 
-Performed Ramdon Forest Classification for classifying the error phone type records into iOS or Android-based on free_tree_sends, super_tree_sends, and source types as features. © 2020 GitHub, Inc.
+Feature engineered with available data and ordinal encoding the feauture data and then performed various classification algorithms for classifying the error phone type records into iOS or Android-based on free_tree_sends, super_tree_sends, location and sources as features. 
